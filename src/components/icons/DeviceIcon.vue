@@ -15,11 +15,11 @@ const comp = computed<string>(() => {
   let iconComponentName: string;
 
   switch (props.componentName) {
-    case 'airValve': iconComponentName = 'IconDeviceAirValve'; break;
-    case 'et312': iconComponentName = 'IconDeviceEt312'; break;
-    default: iconComponentName = 'IconGenericDevice'; break;
+    case 'airValve': iconComponentName = 'DeviceAirValve'; break;
+    case 'et312': iconComponentName = 'DeviceEt312'; break;
+    default: iconComponentName = 'GenericDevice'; break;
   }
 
-  return defineAsyncComponent(() => import(`./${iconComponentName}.vue`))
+  return defineAsyncComponent(() => import(`./Icon${iconComponentName}.vue`))
 });
 </script>
