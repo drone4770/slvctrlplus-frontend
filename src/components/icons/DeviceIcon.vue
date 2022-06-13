@@ -1,5 +1,6 @@
 <template>
-  <component :is="comp"></component>
+  <!--component :is="comp"></component-->
+  <v-icon>{{ comp }}</v-icon>
 </template>
 
 <script setup lang="ts">
@@ -15,11 +16,13 @@ const comp = computed<string>(() => {
   let iconComponentName: string;
 
   switch (props.componentName) {
-    case 'airValve': iconComponentName = 'DeviceAirValve'; break;
-    case 'et312': iconComponentName = 'DeviceEt312'; break;
-    default: iconComponentName = 'GenericDevice'; break;
+    case 'airValve': iconComponentName = 'mdi-fan'; break;
+    case 'et312': iconComponentName = 'mdi-lightning-bolt'; break;
+    case 'strikerMk2': iconComponentName = 'mdi-swap-horizontal'; break;
+    default: iconComponentName = 'mdi-robot'; break;
   }
 
-  return defineAsyncComponent(() => import(`./Icon${iconComponentName}.vue`))
+  return iconComponentName;
+  //return defineAsyncComponent(() => import(`./Icon${iconComponentName}.vue`))
 });
 </script>

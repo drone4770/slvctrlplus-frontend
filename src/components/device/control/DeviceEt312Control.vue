@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import type DeviceEt312 from "../../../model/DeviceEt312";
 
 interface Props {
@@ -13,6 +13,11 @@ let adcDisabled = ref<boolean|null>(!props.device.data?.adc ?? null);
 let mode = ref<number|null>(props.device.data?.mode ?? null);
 let levelA = ref<number|null>(props.device.data?.levelA ?? null);
 let levelB = ref<number|null>(props.device.data?.levelB ?? null);
+
+watch(() => mode.value, mode => modeChangeHandler(mode ?? 0x76))
+watch(() => levelA.value, levelA => levelChangeHandler('A', levelA ?? 0))
+watch(() => levelB.value, levelB => levelChangeHandler('B', levelB ?? 0))
+watch(() => adcDisabled.value, adcDisabled => adcChangeHandler( adcDisabled ?? false))
 
 const modes: { [key: number]: string } = {
   0x76: 'Waves',
@@ -40,23 +45,20 @@ const modes: { [key: number]: string } = {
   0x8C: 'User 5',
 };
 
-const adcChangeHandler = (newAdc: boolean): void => {
-  if (deviceBusy) {
-    return;
-  }
+const selectModes = [];
 
-  deviceBusy = true;
+for (const modeKey in modes) {
+  selectModes.push({value: +modeKey, title: modes[modeKey]});
+}
+
+const adcChangeHandler = (newAdc: boolean): void => {
+  levelA.value = 0;
+  levelB.value = 0;
 
   sendData({adc: !newAdc}).then(data => { deviceBusy = false; console.log(data) }).catch(console.log);
 }
 
 const levelChangeHandler = (channel: string, level: number): void => {
-  if (deviceBusy) {
-    return;
-  }
-
-  deviceBusy = true;
-
   const obj: { [key: string]: any } = {};
   obj['level' + channel.toUpperCase()] = level;
 
@@ -64,12 +66,6 @@ const levelChangeHandler = (channel: string, level: number): void => {
 };
 
 const modeChangeHandler = (newMode: number): void => {
-  if (deviceBusy) {
-    return;
-  }
-
-  deviceBusy = true;
-
   sendData({ mode: newMode }).then(data => { deviceBusy = false; console.log(data) }).catch(console.log);
 };
 
@@ -88,32 +84,85 @@ function sendData(data: {[key: string]: any}): Promise<Response> {
 
 <template>
   <div v-if="props.device.data.connected === true">
-    <dl>
-      <dt>Mode</dt>
-      <dd><select v-model="mode" @change="modeChangeHandler(mode)">
-        <option v-for="(modeName, modeValue) in this.modes" :value="modeValue">{{ modeName }}</option>
-      </select></dd>
-    </dl>
-    <dl>
-      <dt><label :for="'device-' + props.device.deviceId + '-adc'">Control levels</label></dt>
-      <dd><input type="checkbox" :id="'device-' + props.device.deviceId + '-adc'" v-model="adcDisabled" @change="adcChangeHandler(adcDisabled)"></dd>
-    </dl>
+    <v-select
+        v-model="mode"
+        :items="selectModes"
+        label="Mode"
+        hide-details
+    ></v-select>
+    <v-checkbox
+        v-model="adcDisabled"
+        label="Control levels"
+        color="primary"
+        hide-details=true
+        class="pa-0 ma-0"
+    ></v-checkbox>
     <div class="levels">
       <dl>
-        <dt>Channel A</dt>
-        <dd><input type="range" min="0" max="99" step="1" v-model="levelA" :disabled="!adcDisabled" @change="levelChangeHandler('A', levelA)"></dd>
+        <dt><label>Level A</label></dt>
+        <dd>
+          <v-slider
+              v-model="levelA"
+              max="99"
+              min="0"
+              step="1"
+              label="Level A"
+              color="primary"
+              hide-details
+              :disabled="!adcDisabled"
+          >
+            <template v-slot:append>
+              <v-text-field
+                  v-model="levelA"
+                  hide-details
+                  single-line
+                  max="99"
+                  min="0"
+                  density="compact"
+                  variant="outlined"
+                  type="number"
+                  style="width: 80px"
+                  :disabled="!adcDisabled"
+              ></v-text-field>
+            </template>
+          </v-slider>
+        </dd>
       </dl>
       <dl>
-        <dt>Channel B</dt>
-        <dd><input type="range" min="0" max="99" step="1" v-model="levelB" :disabled="!adcDisabled" @change="levelChangeHandler('B', levelB)"></dd>
+        <dt><label>Level B</label></dt>
+        <dd>
+          <v-slider
+              v-model="levelB"
+              max="99"
+              min="0"
+              step="1"
+              label="Level B"
+              color="primary"
+              hide-details
+              :disabled="!adcDisabled"
+          >
+            <template v-slot:append>
+              <v-text-field
+                  v-model="levelB"
+                  hide-details
+                  single-line
+                  max="99"
+                  min="0"
+                  density="compact"
+                  variant="outlined"
+                  type="number"
+                  style="width: 80px"
+                  :disabled="!adcDisabled"
+              ></v-text-field>
+            </template>
+          </v-slider>
+        </dd>
       </dl>
     </div>
   </div>
-  <span v-else>no MK/ET-312 connected</span>
+  <v-alert v-else icon="mdi-alert" color="grey-darken-3" class="text-grey-darken-4" dark>No MK/ET-312 connected</v-alert>
 </template>
 
 <style scoped>
-  .levels {
 
-  }
 </style>

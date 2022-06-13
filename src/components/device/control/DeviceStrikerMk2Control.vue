@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import type DeviceAirValve from "../../../model/DeviceAirValve";
-import {ref} from "vue";
+import {ref,watch} from "vue";
+import type DeviceStrikerMk2 from "../../../model/DeviceStrikerMk2.js";
 
 interface Props {
-  device: DeviceAirValve
+  device: DeviceStrikerMk2
 }
 
 const props = defineProps<Props>();
 
+console.log(props.device.data)
+
 let deviceBusy = false;
-let currentSpeed = ref<number|null>(props.device.speed);
+let currentSpeed = ref<number|null>(props.device.data?.speed ?? null);
+
+watch(
+    () => currentSpeed.value,
+    (speed, prevSpeed) => speedChangeHandler(speed ?? 0)
+)
 
 const speedChangeHandler = (newSpeed: number): void => {
-  if (deviceBusy) {
-    return;
-  }
-
-  deviceBusy = true;
-
   fetch(`http://localhost:1337/device/${props.device.deviceId}`, {
     headers: {
       'Accept': 'application/json',
@@ -27,7 +28,7 @@ const speedChangeHandler = (newSpeed: number): void => {
     body: JSON.stringify({speed: newSpeed, duration: 0})
   }).then(response => response.text())
       .then(data => {
-        currentSpeed.value = newSpeed;
+        //currentSpeed.value = newSpeed;
         deviceBusy = false;
         console.log(data)
       })
@@ -36,9 +37,34 @@ const speedChangeHandler = (newSpeed: number): void => {
 </script>
 
 <template>
-  <div>
-    Speed <input type="range" step="1" min="0" max="100" v-model="currentSpeed" :readonly="deviceBusy" @change="speedChangeHandler(currentSpeed)">%
-  </div>
+  <dl>
+    <dt><label>Speed</label></dt>
+    <dd>
+      <v-slider
+          v-model="currentSpeed"
+          max="100"
+          min="0"
+          step="1"
+          label="Speed"
+          hide-details
+          color="primary"
+      >
+        <template v-slot:append>
+          <v-text-field
+              v-model="currentSpeed"
+              hide-details
+              single-line
+              max="100"
+              min="0"
+              density="compact"
+              variant="outlined"
+              type="number"
+              style="width: 80px"
+          ></v-text-field>
+        </template>
+      </v-slider>
+    </dd>
+  </dl>
 </template>
 
 <style>

@@ -1,94 +1,60 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
+import { ref } from "vue";
+
+let drawer = ref(false);
+const menuItems = [
+  {
+    title: 'Mission Control',
+    to: '/mission-control',
+    icon: 'mdi-rocket-launch'
+  },
+  {
+    title: 'Automation',
+    to: '/automation',
+    icon: 'mdi-play'
+  },
+  {
+    title: 'Devices',
+    to: '/devices',
+    icon: 'mdi-devices'
+  },
+];
+
 </script>
 
 <template>
-  <header>
-    <h1>SlvCtrl+</h1>
+  <v-app theme="dark" class="mx-auto overflow-hidden">
+    <v-app-bar prominent>
+      <v-app-bar-nav-icon color="primary" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>SlvCtrl+</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <span class="text-grey-darken-3">v0.1.0-alpha</span>
+    </v-app-bar>
 
-    <nav>
-      <RouterLink to="/mission-control">Mission Control</RouterLink>
-      <RouterLink to="/devices">Devices</RouterLink>
-    </nav>
+    <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        bottom
+        temporary
+    >
+      <v-list>
+        <v-list-item active-color="primary" v-for="item in menuItems" :prepend-icon="item.icon" :title="item.title" :to="item.to" link></v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-    <div id="footer">0.1.0-alpha</div>
-  </header>
-
-  <RouterView />
+    <v-main>
+      <RouterView />
+    </v-main>
+  </v-app>
 </template>
 
 <style>
 @import '@/assets/base.css';
 
-#app {
-  margin: 0 auto;
-  padding: 0;
-  font-weight: normal;
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-}
-
-main {
-  padding: 2em;
-}
-
-main h2 {
-  font-size: 2em;
-}
-
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-  background: #222;
-  position: relative;
-}
-
-header h1 {
+.v-toolbar-title {
   font-family: Impact, sans-serif;
-  text-align: center;
   color: #eee;
-  padding: 0.5em;
 }
 
-header #footer {
-  position: absolute;
-  bottom: 0;
-  padding: 1em;
-  width: 100%;
-  text-align: center;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-    color: #eee;
-  }
-}
-
-nav {
-  width: 100%;
-  font-size: 1.5em;
-  padding-top: 0.5em;
-  min-width: 225px;
-}
-
-nav a {
-  display: block;
-  padding: 0.5em 2.5em 0.5em 1.5em;
-  color: #bbb;
-  white-space: nowrap;
-}
-
-nav a.router-link-exact-active {
-  background-color: hsla(160, 100%, 37%, 0.2);
-  color: hsla(160, 100%, 37%, 1);
-}
 </style>
