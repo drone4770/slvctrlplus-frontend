@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import {ref,watch} from "vue";
 import type DeviceStrikerMk2 from "../../../model/DeviceStrikerMk2.js";
+import type {Socket} from "socket.io-client";
+import {useSocketIO} from "../../../plugins/vueSocketIOClient.js";
 
 interface Props {
   device: DeviceStrikerMk2
 }
 
 const props = defineProps<Props>();
+const io = useSocketIO() as Socket;
 
-console.log(props.device.data)
-
-let deviceBusy = false;
 let currentSpeed = ref<number|null>(props.device.data?.speed ?? null);
 
 watch(
@@ -19,20 +19,13 @@ watch(
 )
 
 const speedChangeHandler = (newSpeed: number): void => {
-  fetch(`http://localhost:1337/device/${props.device.deviceId}`, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: 'PATCH',
-    body: JSON.stringify({speed: newSpeed, duration: 0})
-  }).then(response => response.text())
-      .then(data => {
-        //currentSpeed.value = newSpeed;
-        deviceBusy = false;
-        console.log(data)
-      })
-      .catch(console.log)
+
+  io.emit('deviceUpdate', {
+    deviceId: props.device.deviceId,
+    data: {
+      speed: newSpeed, duration: 0
+    }
+  });
 };
 </script>
 

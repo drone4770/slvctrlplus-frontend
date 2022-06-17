@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import { ref } from "vue";
+import {useDevicesStore} from "./stores/devices.js";
+import {useSocketIO} from "@/plugins/vueSocketIOClient.js";
+import {Socket} from "socket.io-client";
+import Device from "@/model/Device.js";
 
 let drawer = ref(false);
 const menuItems = [
@@ -21,6 +25,12 @@ const menuItems = [
   },
 ];
 
+const io = useSocketIO() as Socket;
+const devicesStore = useDevicesStore();
+devicesStore.init();
+
+io.on('deviceDisconnected', device => devicesStore.removeDevice(device));
+io.on('deviceConnected', device => devicesStore.addDevice(device));
 </script>
 
 <template>
@@ -50,7 +60,7 @@ const menuItems = [
 </template>
 
 <style>
-@import '@/assets/base.css';
+@import './assets/base.css';
 
 .v-toolbar-title {
   font-family: Impact, sans-serif;

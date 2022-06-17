@@ -9,6 +9,8 @@ import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import { loadFonts } from './plugins/webfontloader'
 import type {ThemeDefinition} from "vuetify/dist/vuetify.js";
+import {vueSocketIOClient} from "./plugins/vueSocketIOClient.js";
+import {createPinia} from "pinia";
 
 loadFonts().catch(console.log)
 
@@ -25,6 +27,8 @@ const dark: ThemeDefinition = {
         warning: '#FB8C00',
     }
 }
+
+const pinia = createPinia();
 
 const vuetify = createVuetify({
     components,
@@ -45,6 +49,10 @@ const vuetify = createVuetify({
 })
 
 createApp(App)
-  .use(router)
-  .use(vuetify)
-  .mount('#app')
+    .use(pinia)
+    .use(vueSocketIOClient, {
+        connection: 'http://localhost:1337',
+    })
+    .use(router)
+    .use(vuetify)
+    .mount('#app')

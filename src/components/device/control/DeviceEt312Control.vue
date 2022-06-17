@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
 import type DeviceEt312 from "../../../model/DeviceEt312";
+import {useSocketIO} from "../../../plugins/vueSocketIOClient.js";
+import type {Socket} from "socket.io-client";
 
 interface Props {
   device: DeviceEt312
 }
 
 const props = defineProps<Props>();
+const io = useSocketIO() as Socket;
 
-let deviceBusy = false;
 let adcDisabled = ref<boolean|null>(!props.device.data?.adc ?? null);
 let mode = ref<number|null>(props.device.data?.mode ?? null);
 let levelA = ref<number|null>(props.device.data?.levelA ?? null);
@@ -55,29 +57,25 @@ const adcChangeHandler = (newAdc: boolean): void => {
   levelA.value = 0;
   levelB.value = 0;
 
-  sendData({adc: !newAdc}).then(data => { deviceBusy = false; console.log(data) }).catch(console.log);
+  sendData({adc: !newAdc});
 }
 
 const levelChangeHandler = (channel: string, level: number): void => {
   const obj: { [key: string]: any } = {};
   obj['level' + channel.toUpperCase()] = level;
 
-  sendData(obj).then(data => { deviceBusy = false; console.log(data) }).catch(console.log);
+  sendData(obj);
 };
 
 const modeChangeHandler = (newMode: number): void => {
-  sendData({ mode: newMode }).then(data => { deviceBusy = false; console.log(data) }).catch(console.log);
+  sendData({ mode: newMode });
 };
 
-function sendData(data: {[key: string]: any}): Promise<Response> {
-
-  return fetch(`http://localhost:1337/device/${props.device.deviceId}`, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: 'PATCH',
-    body: JSON.stringify(data)
+function sendData(data: {[key: string]: any}): void {
+  console.log(data)
+  io.emit('deviceUpdate', {
+    deviceId: props.device.deviceId,
+    data: data
   });
 }
 </script>

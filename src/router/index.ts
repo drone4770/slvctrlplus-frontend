@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/MissionControlView.vue')
     },
     {
+      path: '/automation',
+      name: 'automation',
+      component: () => import('../views/AutomationView.vue')
+    },
+    {
       path: '/devices',
       name: 'devices',
       // route level code-splitting
