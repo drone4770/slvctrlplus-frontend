@@ -97,10 +97,7 @@ io.on('deviceConnected', device => {
 </template>
 
 <style>
-@import './assets/base.css';
-
 .v-toolbar-title {
   font-family: Impact, sans-serif;
 }
-
 </style>
