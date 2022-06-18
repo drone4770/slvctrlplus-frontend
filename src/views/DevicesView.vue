@@ -3,9 +3,10 @@ import DeviceIcon from "../components/icons/DeviceIcon.vue";
 import LoadingState from "../components/LoadingState.vue";
 import { useDevicesStore } from '../stores/devices.js'
 import {storeToRefs} from "pinia";
+import EmptyState from "../components/EmptyState.vue";
 
 const devicesStore = useDevicesStore();
-const { devices } = storeToRefs(devicesStore);
+const { devices, devicesLoaded } = storeToRefs(devicesStore);
 
 function formatFwVersion(fwVersion: string): string {
   const bugfix = Number(fwVersion.slice(-2));
@@ -17,11 +18,11 @@ function formatFwVersion(fwVersion: string): string {
 </script>
 
 <template>
-  <v-container v-if="this.devices" fluid class="px-8">
+  <v-container v-if="this.devicesLoaded" fluid class="px-8 fill-height">
     <h2 class="text-h4 text-grey-darken-1 py-4">
       Connected devices <v-chip pill color="primary">{{ this.devices.length }}</v-chip>
     </h2>
-    <v-container fluid grid-list-md class="px-0">
+    <v-container v-if="this.devices.length > 0" fluid grid-list-md class="px-0">
       <v-row row wrap>
         <v-col cols="12" xs="12" sm="6" md="4" v-for="device in this.devices" xs4>
           <v-card class="rounded-sm">
@@ -57,6 +58,7 @@ function formatFwVersion(fwVersion: string): string {
         </v-col>
       </v-row>
     </v-container>
+    <EmptyState v-else msg="Currently no connected devices" icon="mdi-emoticon-sad-outline" />
   </v-container>
   <LoadingState v-else msg="Getting connected devices"/>
 </template>

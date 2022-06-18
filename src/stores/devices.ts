@@ -3,12 +3,14 @@ import type Device from "../model/Device.js";
 
 export type DeviceState = {
   devices: Device[];
+  devicesLoaded: boolean;
 };
 
 export const useDevicesStore = defineStore({
   id: 'devices',
   state: () => ({
     devices: [],
+    devicesLoaded: false,
   } as DeviceState),
   getters: {
     //doubleCount: (state) => state.counter * 2
@@ -18,7 +20,8 @@ export const useDevicesStore = defineStore({
       fetch('http://localhost:1337/devices')
           .then(response => response.json())
           .then(data => {
-            this.devices = data.items
+            this.devices = data.items;
+            this.devicesLoaded = true;
           })
           .catch(console.log)
     },
