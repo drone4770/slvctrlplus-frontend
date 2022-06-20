@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "@mdi/font": "^6.7.96",
+    "chart.js": "^3.8.0",
     "pinia": "^2.0.13",
     "roboto-fontface": "*",
     "socket.io-client": "^4.5.1",
     "vue": "^3.2.33",
+    "vue-chartjs": "^4.1.1",
     "vue-router": "^4.0.14",
     "vue-socket.io": "^3.0.10",
     "vuetify": "npm:@vuetify/nightly@next",

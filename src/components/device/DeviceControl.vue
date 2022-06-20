@@ -19,6 +19,7 @@ const comp = computed<string>(() => {
     case 'airValve': controlComponent = 'DeviceAirValveControl'; break;
     case 'et312': controlComponent = 'DeviceEt312Control'; break;
     case 'strikerMk2': controlComponent = 'DeviceStrikerMk2Control'; break;
+    case 'distance': controlComponent = 'DeviceDistanceControl'; break;
     default: return controlComponent;
   }
 

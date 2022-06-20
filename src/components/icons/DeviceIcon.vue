@@ -19,6 +19,7 @@ const comp = computed<string>(() => {
     case 'airValve': iconComponentName = 'mdi-fan'; break;
     case 'et312': iconComponentName = 'mdi-lightning-bolt'; break;
     case 'strikerMk2': iconComponentName = 'mdi-swap-horizontal'; break;
+    case 'distance': iconComponentName = 'mdi-ruler'; break;
     default: iconComponentName = 'mdi-robot'; break;
   }
 

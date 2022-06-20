@@ -58,6 +58,9 @@ io.on('deviceConnected', device => {
   snackbar.value.text = `Device "${(device as Device).deviceName}" (${(device as Device).type}) connected`
   snackbar.value.display = true;
 });
+io.on('deviceRefreshed', device => {
+  devicesStore.updateDevice(device);
+});
 </script>
 
 <template>
