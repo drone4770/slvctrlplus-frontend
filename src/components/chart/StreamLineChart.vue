@@ -12,6 +12,9 @@ import {
   Filler
 } from 'chart.js'
 import type {ChartOptions,ChartData} from 'chart.js'
+import 'chartjs-adapter-luxon';
+import ChartStreaming from 'chartjs-plugin-streaming';
+import {onMounted} from "vue";
 
 interface Props {
   chartData: ChartData
@@ -28,7 +31,8 @@ ChartJS.register(
     LinearScale,
     PointElement,
     CategoryScale,
-    Filler
+    Filler,
+    ChartStreaming
 )
 
 const plugins = [];
