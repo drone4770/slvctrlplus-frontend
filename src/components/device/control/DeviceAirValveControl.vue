@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type DeviceAirValve from "../../../model/DeviceAirValve";
-import {ref, watch} from "vue";
+import {reactive} from "vue";
 import {useSocketIO} from "../../../plugins/vueSocketIOClient.js";
 import type {Socket} from "socket.io-client";
 
@@ -11,22 +11,13 @@ interface Props {
 const props = defineProps<Props>();
 const io = useSocketIO() as Socket;
 
-let currentFlow = ref<number|null>(props.device.flow);
-
-watch(
-    () => currentFlow.value,
-    flow => flowChangeHandler(flow ?? 100)
-);
+const device = reactive<DeviceAirValve>(props.device);
 
 const flowChangeHandler = (newFlow: number): void => {
   io.emit('deviceUpdate', {
     deviceId: props.device.deviceId,
     data: {flow: newFlow, duration: 0}
   });
-};
-
-const flowButtonChangeHandler = (newFlow: number): void => {
-  currentFlow.value = newFlow;
 };
 </script>
 
@@ -35,7 +26,7 @@ const flowButtonChangeHandler = (newFlow: number): void => {
     <dt><label>Flow</label></dt>
     <dd>
       <v-slider
-          v-model="currentFlow"
+          v-model="device.flow"
           max="100"
           min="0"
           step="1"
@@ -43,10 +34,11 @@ const flowButtonChangeHandler = (newFlow: number): void => {
           hide-details
           color="primary"
           class="ma-0 ml-2"
+          @update:modelValue="flowChangeHandler"
       >
         <template v-slot:append>
           <v-text-field
-              v-model="currentFlow"
+              v-model="device.flow"
               hide-details
               single-line
               max="100"
@@ -55,6 +47,7 @@ const flowButtonChangeHandler = (newFlow: number): void => {
               variant="outlined"
               type="number"
               style="width: 80px"
+              @update:modelValue="flowChangeHandler"
           ></v-text-field>
         </template>
       </v-slider>
@@ -62,11 +55,7 @@ const flowButtonChangeHandler = (newFlow: number): void => {
   </dl>
   <v-divider class="my-4"></v-divider>
   <div>
-    <v-btn color="grey-darken-3" class="mr-4" @click="flowButtonChangeHandler(100)">open</v-btn>
-    <v-btn color="grey-darken-3" @click="flowButtonChangeHandler(0)">close</v-btn>
+    <v-btn color="grey-darken-3" class="mr-4" @click="flowChangeHandler(100)">open</v-btn>
+    <v-btn color="grey-darken-3" @click="flowChangeHandler(0)">close</v-btn>
   </div>
 </template>
-
-<style>
-
-</style>

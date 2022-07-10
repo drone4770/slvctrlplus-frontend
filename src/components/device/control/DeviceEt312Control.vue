@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
+import {reactive} from "vue";
 import type DeviceEt312 from "../../../model/DeviceEt312";
 import {useSocketIO} from "../../../plugins/vueSocketIOClient.js";
 import type {Socket} from "socket.io-client";
@@ -11,15 +11,7 @@ interface Props {
 const props = defineProps<Props>();
 const io = useSocketIO() as Socket;
 
-let adcDisabled = ref<boolean|null>(!props.device.data?.adc ?? null);
-let mode = ref<number|null>(props.device.data?.mode ?? null);
-let levelA = ref<number|null>(props.device.data?.levelA ?? null);
-let levelB = ref<number|null>(props.device.data?.levelB ?? null);
-
-watch(() => mode.value, mode => modeChangeHandler(mode ?? 0x76))
-watch(() => levelA.value, levelA => levelChangeHandler('A', levelA ?? 0))
-watch(() => levelB.value, levelB => levelChangeHandler('B', levelB ?? 0))
-watch(() => adcDisabled.value, adcDisabled => adcChangeHandler( adcDisabled ?? false))
+const device = reactive<DeviceEt312>(props.device);
 
 const modes: { [key: number]: string } = {
   0x76: 'Waves',
@@ -53,12 +45,7 @@ for (const modeKey in modes) {
   selectModes.push({value: +modeKey, title: modes[modeKey]});
 }
 
-const adcChangeHandler = (newAdc: boolean): void => {
-  levelA.value = 0;
-  levelB.value = 0;
-
-  sendData({adc: !newAdc});
-}
+const adcChangeHandler = (newAdc: boolean): void => sendData({adc: newAdc});
 
 const levelChangeHandler = (channel: string, level: number): void => {
   const obj: { [key: string]: any } = {};
@@ -67,51 +54,61 @@ const levelChangeHandler = (channel: string, level: number): void => {
   sendData(obj);
 };
 
+const levelChangeHandlerA = (level: number): void => levelChangeHandler('A', level);
+const levelChangeHandlerB = (level: number): void => levelChangeHandler('B', level);
+
 const modeChangeHandler = (newMode: number): void => {
   sendData({ mode: newMode });
 };
 
 function sendData(data: {[key: string]: any}): void {
-  console.log(data)
+  props.device.receiveUpdates = false;
   io.emit('deviceUpdate', {
     deviceId: props.device.deviceId,
     data: data
   });
+  setTimeout(() => props.device.receiveUpdates = true, 500);
 }
 </script>
 
 <template>
-  <div v-if="props.device.data.connected === true">
+  <div v-if="device.data.connected === true">
     <v-select
-        v-model="mode"
+        v-model="device.data.mode"
         :items="selectModes"
         label="Mode"
         hide-details
+        @update:modelValue="modeChangeHandler"
     ></v-select>
     <v-checkbox
-        v-model="adcDisabled"
+        v-model="device.data.adc"
+        :true-value="false"
+        :false-value="true"
         label="Control levels"
         color="primary"
         hide-details=true
         class="pa-0 ma-0"
+        @update:modelValue="adcChangeHandler"
     ></v-checkbox>
     <div class="levels">
       <dl>
         <dt><label>Level A</label></dt>
         <dd>
           <v-slider
-              v-model="levelA"
+              v-model="device.data.levelA"
+              @update:modelValue="levelChangeHandlerA"
               max="99"
               min="0"
               step="1"
               label="Level A"
               color="primary"
               hide-details
-              :disabled="!adcDisabled"
+              :disabled="device.data.adc"
           >
             <template v-slot:append>
               <v-text-field
-                  v-model="levelA"
+                  v-model="device.data.levelA"
+                  @update:modelValue="levelChangeHandlerA"
                   hide-details
                   single-line
                   max="99"
@@ -120,7 +117,7 @@ function sendData(data: {[key: string]: any}): void {
                   variant="outlined"
                   type="number"
                   style="width: 80px"
-                  :disabled="!adcDisabled"
+                  :disabled="device.data.adc"
               ></v-text-field>
             </template>
           </v-slider>
@@ -130,18 +127,20 @@ function sendData(data: {[key: string]: any}): void {
         <dt><label>Level B</label></dt>
         <dd>
           <v-slider
-              v-model="levelB"
+              v-model="device.data.levelB"
+              @update:modelValue="levelChangeHandlerB"
               max="99"
               min="0"
               step="1"
               label="Level B"
               color="primary"
               hide-details
-              :disabled="!adcDisabled"
+              :disabled="device.data.adc"
           >
             <template v-slot:append>
               <v-text-field
-                  v-model="levelB"
+                  v-model="device.data.levelB"
+                  @update:modelValue="levelChangeHandlerB"
                   hide-details
                   single-line
                   max="99"
@@ -150,7 +149,7 @@ function sendData(data: {[key: string]: any}): void {
                   variant="outlined"
                   type="number"
                   style="width: 80px"
-                  :disabled="!adcDisabled"
+                  :disabled="device.data.adc"
               ></v-text-field>
             </template>
           </v-slider>

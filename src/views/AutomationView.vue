@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import {useAutomationStore} from "../stores/automation.js";
+
+const automationStore = useAutomationStore();
 </script>
 
 <template>

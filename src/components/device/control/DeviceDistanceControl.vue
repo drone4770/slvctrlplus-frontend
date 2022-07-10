@@ -4,7 +4,7 @@ import type {Socket} from "socket.io-client";
 import {useSocketIO} from "../../../plugins/vueSocketIOClient.js";
 import type DeviceDistance from "../../../model/DeviceDistance.js";
 import StreamLineChart from "../../chart/StreamLineChart.vue";
-import type {Chart, ChartData, ChartOptions} from "chart.js";
+import type {Chart, ChartData} from "chart.js";
 import ChartHelper from "../../../helper/ChartHelper.js";
 import {merge} from "chart.js/helpers";
 
@@ -22,7 +22,7 @@ const currentDistance = computed<number>((): number => {
 
 const chartData: ChartData<'line'> = {
   datasets: [
-    ChartHelper.createEmptyDataSet(),
+    ChartHelper.createEmptyDataSet('Distance', {r: 0, g: 189, b: 126}),
   ]
 };
 
@@ -34,7 +34,7 @@ const onRefresh = (chart: Chart) => {
 };
 
 const chartOptions = merge(
-  ChartHelper.createStreamChartOptions(20000, onRefresh),
+  ChartHelper.createStreamChartOptions(20000, 425, 500, onRefresh),
   {
     scales: {
       y: {

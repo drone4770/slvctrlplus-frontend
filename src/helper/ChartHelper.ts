@@ -2,10 +2,14 @@ import type {ChartDataset, ChartOptions, ScatterDataPoint} from "chart.js";
 import type {Chart} from "chart.js";
 import type {RealTimeScale} from "chartjs-plugin-streaming";
 
+type rgb = {r: number, g: number, b: number}
+
 export default abstract class ChartHelper
 {
     public static createStreamChartOptions(
         duration: number,
+        refreshMs: number,
+        delayMs: number,
         onRefresh: (this: RealTimeScale, chart: Chart) => void | null
     ): ChartOptions {
         return {
@@ -22,8 +26,8 @@ export default abstract class ChartHelper
                     type: 'realtime',
                     realtime: {
                         duration: duration,
-                        refresh: 425,
-                        delay: 500,
+                        refresh: refreshMs,
+                        delay: delayMs,
                         onRefresh: onRefresh
                     },
                     display: false
@@ -43,12 +47,12 @@ export default abstract class ChartHelper
         };
     }
 
-    public static createEmptyDataSet(): ChartDataset<"line", (number | ScatterDataPoint | null)[]> {
+    public static createEmptyDataSet(label: string, color: rgb): ChartDataset<"line", (number | ScatterDataPoint | null)[]> {
         return {
-            label: 'Distance',
-            pointBackgroundColor: 'rgba(0, 189, 126)',
-            backgroundColor: 'rgba(0, 189, 126, 0.1)',
-            borderColor: 'rgba(0, 189, 126, 0.5)',
+            label: label,
+            pointBackgroundColor: `rgba(${color.r}, ${color.g}, ${color.b})`,
+            backgroundColor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.1)`,
+            borderColor: `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`,
             fill: 'origin',
             tension: 0.5,
             data: []

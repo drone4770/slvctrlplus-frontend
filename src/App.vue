@@ -32,6 +32,11 @@ const menuItems = [
     icon: 'mdi-devices'
   },
   {
+    title: 'System health',
+    to: '/health',
+    icon: 'mdi-heart'
+  },
+  {
     title: 'Settings',
     to: '/settings',
     icon: 'mdi-cog'
