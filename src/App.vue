@@ -7,6 +7,7 @@ import type {Socket} from "socket.io-client";
 import type Device from "./model/Device.js";
 import {useSettingsStore} from "./stores/settings.js";
 import {storeToRefs} from "pinia";
+import {useAutomationStore} from "./stores/automation.js";
 
 let drawer = ref(false);
 let snackbar = ref({
@@ -50,6 +51,8 @@ const { theme } = storeToRefs(settingsStore);
 
 const devicesStore = useDevicesStore();
 devicesStore.init();
+const automationStore = useAutomationStore();
+automationStore.init();
 
 io.on('deviceDisconnected', device => {
   devicesStore.removeDevice(device);
