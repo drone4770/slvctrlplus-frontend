@@ -69,7 +69,7 @@ io.on('deviceRefreshed', device => {
 </script>
 
 <template>
-  <v-app :theme="this.theme" class="mx-auto overflow-hidden">
+  <v-app :theme="theme" class="mx-auto overflow-hidden">
     <v-app-bar prominent>
       <v-app-bar-nav-icon color="primary" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title color="logo">SlvCtrl+</v-toolbar-title>

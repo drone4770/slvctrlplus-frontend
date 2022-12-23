@@ -1,5 +1,5 @@
 <template>
-  <component :is="comp" :device="this.device"></component>
+  <component :is="comp" :device="device"></component>
 </template>
 
 <script setup lang="ts">

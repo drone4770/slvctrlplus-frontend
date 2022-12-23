@@ -48,13 +48,13 @@ function formatFwVersion(fwVersion: string): string {
         <v-list-item>
           <v-list-item-header>
             <v-list-item-title>Firmware</v-list-item-title>
-            <v-list-item-subtitle v-text="this.formatFwVersion(this.device.fwVersion)"></v-list-item-subtitle>
+            <v-list-item-subtitle v-text="formatFwVersion(device.fwVersion)"></v-list-item-subtitle>
           </v-list-item-header>
         </v-list-item>
         <v-list-item>
           <v-list-item-header>
             <v-list-item-title>Connected since</v-list-item-title>
-            <v-list-item-subtitle v-text="new Date(this.device.connectedSince).toISOString()"></v-list-item-subtitle>
+            <v-list-item-subtitle v-text="new Date(device.connectedSince).toISOString()"></v-list-item-subtitle>
           </v-list-item-header>
         </v-list-item>
         <v-list-item>
