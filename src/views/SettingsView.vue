@@ -1,19 +1,21 @@
 <script setup lang="ts">
-  import {ref} from "vue";
-  import {useSettingsStore} from "../stores/settings.js";
-  import {storeToRefs} from "pinia";
+import { ref } from "vue";
+import { useSettingsStore } from "../stores/settings.js";
+import { storeToRefs } from "pinia";
 
-  const valid = ref(false);
+const valid = ref(false);
 
-  const settingsStore = useSettingsStore();
-  const { serverUrl, theme } = storeToRefs(settingsStore);
+const settingsStore = useSettingsStore();
+const { serverUrl, theme } = storeToRefs(settingsStore);
 
-  const serverUrlRules = [
-    (v: string) => !!v || 'Server URL is required',
-    (v: string) => v.length >= 10 || 'Server URL must be at least 10 characters long',
-    (v: string) => /^https?:\/\/.+/.test(v) || 'Server URL must start with http(s)://',
-    (v: string) => /[^/]$/.test(v) || 'Server URL must not end in a /',
-  ];
+const serverUrlRules = [
+  (v: string) => !!v || "Server URL is required",
+  (v: string) =>
+    v.length >= 10 || "Server URL must be at least 10 characters long",
+  (v: string) =>
+    /^https?:\/\/.+/.test(v) || "Server URL must start with http(s)://",
+  (v: string) => /[^/]$/.test(v) || "Server URL must not end in a /",
+];
 </script>
 
 <template>
@@ -23,20 +25,21 @@
       <v-row>
         <v-col cols="6">
           <v-text-field
-              v-model="this.serverUrl"
-              :rules="serverUrlRules"
-              label="Server URL"
-              required
+            v-model="serverUrl"
+            :rules="serverUrlRules"
+            label="Server URL"
+            required
           ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="6">
-          <v-switch color="primary"
-              v-model="this.theme"
-              false-value="light"
-              true-value="dark"
-              :label="`Dark mode: ${'dark' === this.theme ? 'on' : 'off'}`"
+          <v-switch
+            color="primary"
+            v-model="theme"
+            false-value="light"
+            true-value="dark"
+            :label="`Dark mode: ${'dark' === theme ? 'on' : 'off'}`"
           ></v-switch>
         </v-col>
       </v-row>
@@ -44,5 +47,4 @@
   </v-container>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

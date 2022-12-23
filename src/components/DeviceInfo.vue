@@ -1,18 +1,19 @@
 <script setup lang="ts">
-
 import type Device from "../model/Device.js";
 import DeviceIcon from "./icons/DeviceIcon.vue";
-import {computed, reactive} from "vue";
+import { computed, reactive } from "vue";
 
 interface Props {
-  device: Device
+  device: Device;
 }
 
 const props = defineProps<Props>();
 const device = reactive<Device>(props.device);
 
 const lastRefreshed = computed<string>((): string => {
-  return device.lastRefresh ? new Date(device.lastRefresh).toISOString() :  'n/a';
+  return device.lastRefresh
+    ? new Date(device.lastRefresh).toISOString()
+    : "n/a";
 });
 
 function formatFwVersion(fwVersion: string): string {
@@ -20,7 +21,7 @@ function formatFwVersion(fwVersion: string): string {
   const minor = Number(fwVersion.slice(-4, -2));
   const major = Number(fwVersion.slice(0, -4));
 
-  return `${major}.${minor}.${bugfix}`
+  return `${major}.${minor}.${bugfix}`;
 }
 </script>
 
@@ -36,7 +37,9 @@ function formatFwVersion(fwVersion: string): string {
         <v-list-item>
           <v-list-item-header>
             <v-list-item-title>ID</v-list-item-title>
-            <v-list-item-subtitle v-text="device.deviceId"></v-list-item-subtitle>
+            <v-list-item-subtitle
+              v-text="device.deviceId"
+            ></v-list-item-subtitle>
           </v-list-item-header>
         </v-list-item>
         <v-list-item>
@@ -48,13 +51,17 @@ function formatFwVersion(fwVersion: string): string {
         <v-list-item>
           <v-list-item-header>
             <v-list-item-title>Firmware</v-list-item-title>
-            <v-list-item-subtitle v-text="this.formatFwVersion(this.device.fwVersion)"></v-list-item-subtitle>
+            <v-list-item-subtitle
+              v-text="formatFwVersion(device.fwVersion)"
+            ></v-list-item-subtitle>
           </v-list-item-header>
         </v-list-item>
         <v-list-item>
           <v-list-item-header>
             <v-list-item-title>Connected since</v-list-item-title>
-            <v-list-item-subtitle v-text="new Date(this.device.connectedSince).toISOString()"></v-list-item-subtitle>
+            <v-list-item-subtitle
+              v-text="new Date(device.connectedSince).toISOString()"
+            ></v-list-item-subtitle>
           </v-list-item-header>
         </v-list-item>
         <v-list-item>
