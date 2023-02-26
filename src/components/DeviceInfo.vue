@@ -16,6 +16,10 @@ const lastRefreshed = computed<string>((): string => {
     : "n/a";
 });
 
+const deviceTypeModel = computed<string>((): string => {
+  return `${device.type} ${(device.type === 'generic') ? ` (model: ${device.deviceModel})` : ''}`;
+});
+
 function formatFwVersion(fwVersion: string): string {
   const bugfix = Number(fwVersion.slice(-2));
   const minor = Number(fwVersion.slice(-4, -2));
@@ -28,7 +32,7 @@ function formatFwVersion(fwVersion: string): string {
 <template>
   <v-card class="rounded-sm">
     <v-card-title>
-      <DeviceIcon :componentName="device.type" class="icon" />
+      <DeviceIcon :device="device" class="icon" />
       {{ device.deviceName }}
     </v-card-title>
     <v-divider></v-divider>
@@ -45,7 +49,9 @@ function formatFwVersion(fwVersion: string): string {
         <v-list-item>
           <v-list-item-header>
             <v-list-item-title>Type</v-list-item-title>
-            <v-list-item-subtitle v-text="device.type"></v-list-item-subtitle>
+            <v-list-item-subtitle
+              v-text="deviceTypeModel"
+            ></v-list-item-subtitle>
           </v-list-item-header>
         </v-list-item>
         <v-list-item>

@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
 import type Device from "../model/Device.js";
-import type DeviceDistance from "../model/DeviceDistance.js";
-import type DeviceAirValve from "../model/DeviceAirValve.js";
-import type DeviceEt312 from "../model/DeviceEt312.js";
+import type DeviceGeneric from "../model/DeviceGeneric.js";
 
 export type DeviceState = {
   devices: { [key: string]: Device };
@@ -24,7 +22,10 @@ export const useDevicesStore = defineStore({
       fetch(`http://${location.hostname}:1337/devices`)
         .then((response) => response.json())
         .then((data) => {
-          data.items.forEach(this.addDevice);
+          data.items.forEach((v: Device) => {
+            v.receiveUpdates = true;
+            this.devices[v.deviceId as string] = v;
+          });
           this.devicesLoaded = true;
         })
         .catch(console.log);
@@ -45,16 +46,8 @@ export const useDevicesStore = defineStore({
 
       device.lastRefresh = updatedDevice.lastRefresh;
 
-      if (device.type === "et312") {
-        (device as DeviceEt312).data = (updatedDevice as DeviceEt312).data;
-      } else if (device.type === "distance") {
-        (device as DeviceDistance).data = (
-          updatedDevice as DeviceDistance
-        ).data;
-      } else if (device.type === "airValve") {
-        (device as DeviceAirValve).flow = (
-          updatedDevice as DeviceAirValve
-        ).flow;
+      if (device.type === "generic") {
+        (device as DeviceGeneric).data = (updatedDevice as DeviceGeneric).data;
       } else {
         console.log(
           `Device update for unhandled device of type: ${updatedDevice.type} (${updatedDevice.deviceName})`
