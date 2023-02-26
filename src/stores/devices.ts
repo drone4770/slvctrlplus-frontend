@@ -19,7 +19,7 @@ export const useDevicesStore = defineStore({
   },
   actions: {
     init() {
-      fetch(`http://${location.hostname}:1337/device`)
+      fetch(`http://${location.hostname}:1337/devices`)
         .then((response) => response.json())
         .then((data) => {
           data.items.forEach((v: Device) => {
@@ -34,14 +34,13 @@ export const useDevicesStore = defineStore({
       delete this.devices[removedDevice.deviceId as string];
     },
     addDevice(device: Device) {
+      device.receiveUpdates = true;
       this.devices[device.deviceId as string] = device;
     },
     updateDevice(updatedDevice: Device) {
       const device = this.devices[updatedDevice.deviceId as string];
 
-      console.log(device)
-
-      if (undefined === device || !device.receiveUpdates) {
+      if (!device || !device.receiveUpdates) {
         return;
       }
 
