@@ -19,7 +19,7 @@ export const useDevicesStore = defineStore({
   },
   actions: {
     init() {
-      fetch("http://localhost:1337/devices")
+      fetch(`http://${location.hostname}:1337/device`)
         .then((response) => response.json())
         .then((data) => {
           data.items.forEach((v: Device) => {
@@ -39,7 +39,9 @@ export const useDevicesStore = defineStore({
     updateDevice(updatedDevice: Device) {
       const device = this.devices[updatedDevice.deviceId as string];
 
-      if (!device.receiveUpdates) {
+      console.log(device)
+
+      if (undefined === device || !device.receiveUpdates) {
         return;
       }
 
