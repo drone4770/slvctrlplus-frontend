@@ -1,15 +1,15 @@
 <script setup lang="ts">
 defineProps<{
-  msg: string,
-  icon: string,
-}>()
+  msg: string;
+  icon: string;
+}>();
 </script>
 
 <template>
   <v-container class="fill-height mt-n16" fluid>
     <v-row class="fill-height" align-content="center" justify="center">
       <v-col cols="12" class="text-subtitle-1 text-center">
-        <v-icon size="64" color="primary">{{icon}}</v-icon>
+        <v-icon size="64" color="primary">{{ icon }}</v-icon>
       </v-col>
       <v-col cols="12" class="text-grey-darken-3 text-subtitle-1 text-center">
         {{ msg }}
@@ -19,7 +19,7 @@ defineProps<{
 </template>
 
 <style scoped>
-  .v-icon {
-    opacity: 0.2;
-  }
+.v-icon {
+  opacity: 0.2;
+}
 </style>

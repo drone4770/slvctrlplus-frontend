@@ -19,7 +19,7 @@ const serverUrlRules = [
 </script>
 
 <template>
-  <v-container fluid class="px-8 fill-height">
+  <v-container fluid class="px-8">
     <h2 class="text-h4 text-grey-darken-1 py-4">Settings</h2>
     <v-form v-model="valid">
       <v-row>

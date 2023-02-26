@@ -3640,10 +3640,10 @@ vue@^3.2.33:
     "@vue/server-renderer" "3.2.33"
     "@vue/shared" "3.2.33"
 
-"vuetify@npm:@vuetify/nightly@next":
-  version "3.0.0-next-20220604.0"
-  resolved "https://registry.yarnpkg.com/@vuetify/nightly/-/nightly-3.0.0-next-20220604.0.tgz#b888f1fda0cff9f5938bad6f0094b980b52a6646"
-  integrity sha512-UT8ZnFs5FTUmI5Z5Jblt31BaPVMBGrKFRzJPquJOzFMH5phBkj8CghvHDL5dEXvkr56e45L0vz2GEk1zPnsNeQ==
+vuetify@3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.1.6.tgz#9ba513ac7b3ca9b0c7817dc63a8c18079eea9e49"
+  integrity sha512-4We27L5ksy8esNKfUPWPucEU+M7XJDO2o66zXL5qiBVbALwshcK2CAobLQMx+ALtkLENXAYNH3RzvfAYjTi3Aw==
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"

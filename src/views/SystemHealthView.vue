@@ -54,7 +54,7 @@ const chartOptions = merge(
 </script>
 
 <template>
-  <v-container fluid class="px-8 fill-height">
+  <v-container fluid class="px-8">
     <h2 class="text-h4 text-grey-darken-1 py-4">System health</h2>
     <h3>Memory</h3>
     <StreamLineChart

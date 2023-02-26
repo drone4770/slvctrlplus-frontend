@@ -74,7 +74,7 @@ io.on('deviceRefreshed', device => {
       <v-app-bar-nav-icon color="primary" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title color="logo">SlvCtrl+</v-toolbar-title>
       <v-spacer></v-spacer>
-      <span class="text-grey-darken-3">v0.1.0-alpha</span>
+      <span class="text-grey-darken-3 mr-5">v0.1.0-alpha</span>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -84,7 +84,7 @@ io.on('deviceRefreshed', device => {
         temporary
     >
       <v-list>
-        <v-list-item active-color="primary" v-for="item in menuItems" :prepend-icon="item.icon" :title="item.title" :to="item.to" link></v-list-item>
+        <v-list-item active-color="primary" v-for="item in menuItems" :prepend-icon="item.icon" :title="item.title" :to="item.to" :key="item.to" link></v-list-item>
       </v-list>
     </v-navigation-drawer>
 

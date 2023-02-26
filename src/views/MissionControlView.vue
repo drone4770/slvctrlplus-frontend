@@ -13,9 +13,22 @@ const { devicesLoaded, deviceList } = storeToRefs(devicesStore);
 <template>
   <v-container v-if="devicesLoaded" fluid class="px-8 fill-height">
     <h2 class="text-h4 text-grey-darken-1 py-4">Mission control</h2>
-    <v-container v-if="deviceList.length > 0" fluid grid-list-md class="px-0">
-      <v-row row wrap>
-        <v-col cols="12" xs="12" sm="6" md="4" v-for="device in deviceList" xs4>
+    <v-container
+      v-if="deviceList.length > 0"
+      fluid
+      grid-list-md
+      class="px-0 fill-height"
+    >
+      <v-row row wrap class="fill-height">
+        <v-col
+          cols="12"
+          xs="12"
+          sm="6"
+          md="4"
+          :key="device.deviceId"
+          v-for="device in deviceList"
+          xs4
+        >
           <v-card class="rounded-sm">
             <v-card-title>
               <DeviceIcon :device="device" class="icon" />
