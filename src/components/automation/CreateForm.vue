@@ -58,11 +58,9 @@ function createScript(): void {
 </script>
 
 <template>
-  <v-form @submit.prevent v-model="isValid">
+  <v-form @submit.prevent v-model="isValid" id="create-form">
     <v-card>
-      <v-card-title>
-        <span class="text-h5">Create new script</span>
-      </v-card-title>
+      <v-card-title class="text-h5 my-3"> Create new script </v-card-title>
       <v-card-text>
         <v-text-field
           label="Name*"
@@ -89,3 +87,9 @@ function createScript(): void {
     </v-card>
   </v-form>
 </template>
+<style scoped>
+#create-form {
+  width: 640px;
+  max-width: 100%;
+}
+</style>

@@ -191,9 +191,9 @@ const itemKeyDelete = ref("");
     </v-row>
   </v-container>
 
-  <v-dialog v-model="showDeleteDialog" persistent>
+  <v-dialog v-model="showDeleteDialog" persistent width="auto">
     <v-card>
-      <v-card-title class="text-h5"> Delete script </v-card-title>
+      <v-card-title class="text-h5 my-3"> Delete script </v-card-title>
       <v-card-text
         >Are you sure you want to delete script <b>{{ itemKeyDelete }}</b
         >?</v-card-text
@@ -210,7 +210,7 @@ const itemKeyDelete = ref("");
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="showCreateDialog" persistent>
+  <v-dialog v-model="showCreateDialog" persistent width="auto">
     <CreateForm
       :onSave="() => (this.showCreateDialog = false)"
       :onCancel="() => (this.showCreateDialog = false)"
