@@ -40,8 +40,8 @@ const plugins = [];
 
 <template>
   <Line
-      :chartData="props.chartData"
-      :chartOptions="props.chartOptions"
+      :data="props.chartData"
+      :options="props.chartOptions"
       chartId="foo-id"
       :width="400"
       :height="200"
