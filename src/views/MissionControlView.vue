@@ -36,6 +36,9 @@ const { devicesLoaded, deviceList } = storeToRefs(devicesStore);
                 <DeviceIcon :device="device" class="icon" />
                 {{ device.deviceName }}
               </v-card-title>
+              <v-card-text>
+	        Model : {{ device.deviceModel }}
+              </v-card-text>
               <v-divider></v-divider>
               <v-card-text>
                 <DeviceControl :device="device" />

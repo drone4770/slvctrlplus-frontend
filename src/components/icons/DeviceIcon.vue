@@ -33,6 +33,12 @@ const comp = computed<string>(() => {
     case "generic-distance":
       iconComponentName = "mdi-ruler";
       break;
+    case "generic-display":
+      iconComponentName = "mdi-overscan";
+      break;
+    case String(deviceTypeModel.match(/^buttplugio.*/)):
+      iconComponentName = "mdi-access-point";
+      break;
     default:
       iconComponentName = "mdi-robot";
       break;
