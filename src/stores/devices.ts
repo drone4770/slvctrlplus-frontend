@@ -46,7 +46,7 @@ export const useDevicesStore = defineStore({
 
       device.lastRefresh = updatedDevice.lastRefresh;
 
-      if (device.type === "generic") {
+      if (device.type === "generic" || device.type === "buttplugio") {
         (device as DeviceGeneric).data = (updatedDevice as DeviceGeneric).data;
       } else {
         console.log(

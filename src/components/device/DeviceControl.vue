@@ -35,6 +35,8 @@ const comp = computed<string>(() => {
       default:
         controlComponent = "GenericDeviceControl";
     }
+  } else if (props.device.type === "buttplugio") {
+      controlComponent = "GenericDeviceControl";
   } else {
     console.log(
       `Cannot find control component for device of type ${props.device.type}`

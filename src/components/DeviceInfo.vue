@@ -17,15 +17,19 @@ const lastRefreshed = computed<string>((): string => {
 });
 
 const deviceTypeModel = computed<string>((): string => {
-  return `${device.type} ${(device.type === 'generic') ? ` (model: ${device.deviceModel})` : ''}`;
+  return `${device.type} ${(device.type === 'generic') || (device.type === 'buttplugio') ? ` (model: ${device.deviceModel})` : ''}`;
 });
 
 function formatFwVersion(fwVersion: string): string {
-  const bugfix = Number(fwVersion.slice(-2));
-  const minor = Number(fwVersion.slice(-4, -2));
-  const major = Number(fwVersion.slice(0, -4));
+  if (fwVersion) {
+    const bugfix = Number(fwVersion.slice(-2));
+    const minor = Number(fwVersion.slice(-4, -2));
+    const major = Number(fwVersion.slice(0, -4));
 
-  return `${major}.${minor}.${bugfix}`;
+    return `${major}.${minor}.${bugfix}`;
+  } else {
+    return `0.0.0`;
+  }
 }
 </script>
 
